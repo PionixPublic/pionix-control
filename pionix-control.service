@@ -1,0 +1,17 @@
+[Unit]
+Description=PionixControl
+Requires=mosquitto.service
+Requires=network.target  
+After=mosquitto.service
+After=network.target
+After=chrony.service
+
+[Service]
+Type=simple
+Restart=always
+User=root
+LimitCORE=infinity
+ExecStart=/usr/bin/pionix-control --metadata-dir /etc/everest --charger-info /etc/everest/charger_info.yaml                                
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,25 @@
+[Unit]
+Description=EVerest
+Requires=mosquitto.service
+Requires=network.target
+After=mosquitto.service
+After=network.target
+After=chrony.service
+OnFailure=everest.service
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10s
+StartLimitInterval=120s
+StartLimitBurst=2
+Restart=always
+User=root
+LimitCORE=infinity
+EnvironmentFile = /etc/everest/everest_environment.env
+WorkingDirectory=/usr/bin
+ExecStartPre = /bin/bash -c 'if [ ! -s /etc/everest/everest_environment.env ]; then echo EVEREST_CONFIG=\'/etc/everest/custom_configs/1_config-dc-dinspec.yaml\' > /etc/everest/everest_environment.env; fi'
+ExecStart = /etc/everest/selected-everest/bin/manager --conf $EVEREST_CONFIG
+
+[Install]
+WantedBy=multi-user.target

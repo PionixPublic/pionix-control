@@ -1,0 +1,6 @@
+# here you can add configs that pionix-control can find
+configs:
+  - /mnt/user_data/opt/everest/conf/config-deploy-devboard.yaml
+config_dirs:
+  - /mnt/user_data/testing-configs
+  - /opt/everest/conf
