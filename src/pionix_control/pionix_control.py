@@ -316,7 +316,7 @@ def publish_selected_config():
     mqtt_client.publish(selected_config_var_topic, cfg)
 
 
-def on_connect(mqtt_client, obj, flags, rc):
+def on_connect(mqtt_client, obj, flags, rc, properties=None):
     log.info("connected")
     # now publish that control is available
     pub_thread = Thread(target=publish_repeatedly)
