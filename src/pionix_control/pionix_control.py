@@ -19,7 +19,7 @@ import multiprocessing
 import requests
 import re
 import datetime
-from paho.mqtt import client as mqtt_client
+from paho.mqtt import client as mqtt
 from threading import Thread
 import time
 import dbus
@@ -28,7 +28,10 @@ import dotenv
 
 log = logging.getLogger("pionix_control")
 
-mqtt_client = mqtt_client.Client("pionix_control")
+if hasattr(mqtt, "CallbackAPIVersion"):  # paho >= 2.0
+    mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="pionix_control")
+else:
+    mqtt_client = mqtt.Client(client_id="pionix_control")
 
 pionix_control_config_path = None
 everest_environment_env_path = None
@@ -316,7 +319,7 @@ def publish_selected_config():
     mqtt_client.publish(selected_config_var_topic, cfg)
 
 
-def on_connect(mqtt_client, obj, flags, rc):
+def on_connect(mqtt_client, obj, flags, rc, properties=None):
     log.info("connected")
     # now publish that control is available
     pub_thread = Thread(target=publish_repeatedly)
